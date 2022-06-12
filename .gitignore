@@ -1,0 +1,8 @@
+# Project exclude paths
+/douy-categories/target/
+/douy-commons/target/
+/douy-gateway/target/
+/douy-search/target/
+/douy-sms/target/
+/douy-users/target/
+/douy-videos/target/
