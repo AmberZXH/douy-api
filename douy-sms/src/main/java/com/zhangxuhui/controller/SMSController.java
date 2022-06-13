@@ -1,5 +1,6 @@
 package com.zhangxuhui.controller;
 
+import com.zhangxuhui.constant.RedisPrefix;
 import com.zhangxuhui.utils.SMSUtils;
 import com.zhangxuhui.vo.param.MsgVO;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -35,7 +36,7 @@ public class SMSController {
         log.info("发送短信的手机号为: {}", phone);
 
         //2.每次发送验证码之前判断,是否存在timeout_132... timeout_176
-        String timeoutKey = "timeout_" + phone;
+        String timeoutKey = RedisPrefix.TIME_OUT + phone;
         if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(timeoutKey))) {
             throw new RuntimeException("提示: 不允许重复发送!");
         }
@@ -47,7 +48,7 @@ public class SMSController {
             //smsUtils.sendMsg(phone, code);
 
             //5.将验证码放入redis   key: phone_132....   value:code
-            String phoneKey = "phone_" + phone;//给key加入一个前缀
+            String phoneKey = RedisPrefix.PHONE + phone;//给key加入一个前缀
             stringRedisTemplate.opsForValue().set(phoneKey, code, 10, TimeUnit.MINUTES);//10分钟验证有效
 
             //6.如果验证码在有效期内,不允许重新发送  //timeout_132... true
